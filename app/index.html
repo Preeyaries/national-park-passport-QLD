@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QLD Parks Passport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&family=Big+Shoulders+Display:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <path id="arcT" d="M 13 50 A 37 37 0 0 1 87 50"/>
+  <path id="arcB" d="M 6.5 50 A 43.5 43.5 0 0 0 93.5 50"/>
+</defs></svg>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow">Queensland, Australia · Prototype</span>
+      <h1>QLD Parks Passport</h1>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="acct" id="acct"></div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="passport" aria-selected="true">Passport</button>
+    <button class="tab" role="tab" data-tab="parks" aria-selected="false">Parks</button>
+    <button class="tab" role="tab" data-tab="community" aria-selected="false">Community</button>
+  </div>
+
+  <div class="notice" id="sampleNotice" hidden>
+    <span>Three sample visits are loaded so you can see how a stamped passport looks.</span>
+    <button class="btn ghost small" id="clearSamples">Clear sample stamps</button>
+  </div>
+
+  <main id="view"></main>
+
+  <footer id="foot"></footer>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlgTitle"><div class="dlg" id="dlgBody"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

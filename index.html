@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QLD Parks Passport</title>
+<meta name="description" content="A digital passport for Queensland national parks. Check in, collect stamps and keep your memories.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&family=Big+Shoulders+Display:wght@600;700;800&family=DM+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: the hero is the passport cover (green and foil) holding an open booklet. Everything below is quiet paper, with one ink colour per region. */
+:root{
+  --paper:#e9eee6; --page:#f7f9f4; --fg:#16231c; --muted:#56675c; --line:#c6d0c3;
+  --accent:#0f5c4a; --on-accent:#f3faf6; --secret:#9a5a12;
+  --cover:#0f4a33; --cover-2:#0b3a28; --foil:#dcb96e; --on-cover:#e8efe6;
+  --leaf:#f7f9f4; --leaf-fg:#16231c; --leaf-muted:#56675c; --leaf-line:#c6d0c3; --leaf-ink:#1f4e8c;
+  --ink-1:#1f4e8c; --ink-2:#74388a; --ink-3:#0b7479; --ink-4:#a2481b;
+  --ink-5:#1a69ad; --ink-6:#8a2f4b; --ink-7:#2a742a; --ink-8:#93380f;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Albert Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  --hand:"Caveat","Bradley Hand","Segoe Print",cursive;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#101713; --page:#18211c; --fg:#e5ede6; --muted:#98aa9e; --line:#2d3b33;
+  --accent:#62caa7; --on-accent:#06231b; --secret:#e2a959;
+  --ink-1:#7fb0f0; --ink-2:#cf97e6; --ink-3:#5fd0d4; --ink-4:#f0975f;
+  --ink-5:#6fbdf5; --ink-6:#ee8fae; --ink-7:#84d584; --ink-8:#f08a55;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#101713; --page:#18211c; --fg:#e5ede6; --muted:#98aa9e; --line:#2d3b33;
+  --accent:#62caa7; --on-accent:#06231b; --secret:#e2a959;
+  --ink-1:#7fb0f0; --ink-2:#cf97e6; --ink-3:#5fd0d4; --ink-4:#f0975f;
+  --ink-5:#6fbdf5; --ink-6:#ee8fae; --ink-7:#84d584; --ink-8:#f08a55;
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--fg);font:400 16px/1.55 var(--body)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--foil);outline-offset:3px}
+.in{max-width:1080px;margin:0 auto;padding-inline:20px}
+.eyebrow{font:500 12px/1.3 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+h1,h2,h3{font-family:var(--display);text-transform:uppercase;margin:0;text-wrap:balance}
+h2{font-weight:800;font-size:clamp(30px,5vw,44px);line-height:1}
+h3{font-weight:700;font-size:22px;line-height:1.05;letter-spacing:.02em}
+p{margin:0}
+.btn{display:inline-block;background:var(--foil);color:var(--cover);border:0;padding:12px 20px;font:700 15px var(--body);border-radius:4px;cursor:pointer;text-decoration:none}
+.btn.line{background:none;color:var(--on-cover);border:1px solid var(--foil)}
+
+/* hero = cover */
+.hero{background:linear-gradient(180deg,var(--cover),var(--cover-2));color:var(--on-cover)}
+.nav{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between;padding-block:18px}
+.brand{font:800 22px/1 var(--display);letter-spacing:.1em;color:var(--foil);text-transform:uppercase}
+.nav nav{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:14px}
+.nav nav a{text-decoration:none;opacity:.9}
+.nav nav a:hover{text-decoration:underline}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:center;padding-block:36px 64px}
+.hero h1{font-weight:800;font-size:clamp(44px,8vw,84px);line-height:.92;color:var(--foil);letter-spacing:.01em}
+.hero .lede{font-size:18px;max-width:46ch;margin-top:18px}
+.hero .eyebrow{color:var(--foil);margin-bottom:14px;display:block}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.note{font-size:13px;opacity:.75;margin-top:14px}
+@media (max-width:860px){.hero-grid{grid-template-columns:minmax(0,1fr);padding-block:20px 44px}}
+
+/* booklet in the hero (always paper coloured, like a real page) */
+.spread{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));filter:drop-shadow(0 18px 30px rgba(0,0,0,.35));transform:rotate(-1.5deg)}
+.leaf{background:var(--leaf);color:var(--leaf-fg);padding:16px 14px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.leaf.l{border-radius:12px 0 0 12px;box-shadow:inset -18px 0 18px -18px rgba(0,0,0,.3)}
+.leaf.r{border-radius:0 12px 12px 0;box-shadow:inset 18px 0 18px -18px rgba(0,0,0,.3)}
+.leaf .art{width:100%;aspect-ratio:4/3;border-radius:4px;display:block}
+.leaf .no{font:500 9.5px var(--mono);letter-spacing:.1em;color:var(--leaf-muted);text-transform:uppercase}
+.leaf .pname{font:800 clamp(20px,3.4vw,30px)/1 var(--display);color:var(--leaf-ink);text-transform:uppercase}
+.leaf .small{font-size:12.5px;color:var(--leaf-muted)}
+.leaf ul{list-style:none;margin:0;padding:0;font-size:13px;display:flex;flex-direction:column;gap:3px}
+.rec{display:grid;grid-template-columns:minmax(0,96px) minmax(0,1fr);gap:10px;align-items:center}
+.rec svg{width:100%;height:auto;display:block}
+.lab{font:500 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--leaf-muted);display:block}
+.hand{font:600 20px/1.2 var(--hand);border-bottom:1px solid var(--leaf-line);display:block;min-height:25px;overflow-wrap:anywhere}
+.lines{font:500 19px/26px var(--hand);min-height:78px;background:repeating-linear-gradient(to bottom,transparent 0 25px,var(--leaf-line) 25px 26px);overflow-wrap:anywhere}
+.snapbox{aspect-ratio:16/9;border:1px dashed var(--leaf-line);border-radius:4px;display:grid;place-items:center;font-size:12px;color:var(--leaf-muted);text-align:center;padding:6px}
+.leaf .inkbtn{align-self:flex-start;background:var(--cover);color:var(--leaf);border:0;border-radius:4px;padding:8px 12px;font:600 13px var(--body);cursor:pointer}
+.stamp{opacity:.9}
+.stamp text{font-family:var(--display);font-weight:700;letter-spacing:.06em}
+.stamp .date{font-family:var(--mono);font-weight:500;letter-spacing:0}
+@keyframes thump{0%{transform:scale(1.7) rotate(-14deg);opacity:0}60%{transform:scale(.94);opacity:1}100%{transform:scale(1)}}
+.thump{animation:thump .45s cubic-bezier(.2,.8,.3,1) both;transform-origin:center;transform-box:fill-box}
+@media (prefers-reduced-motion: reduce){.thump{animation:none}.spread{transform:none}}
+
+section{padding-block:64px}
+.head{display:flex;flex-direction:column;gap:10px;max-width:62ch;margin-bottom:32px}
+.head .eyebrow{color:var(--muted)}
+.head p{color:var(--muted)}
+
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:24px;counter-reset:s;list-style:none;margin:0;padding:0}
+.steps li{counter-increment:s;border-top:2px solid var(--fg);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+.steps li::before{content:"Step " counter(s);font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.steps p{color:var(--muted)}
+
+.band{background:var(--page);border-block:1px solid var(--line)}
+.regions{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 16px}
+.region{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.region svg{width:112px;height:auto}
+.region b{font-weight:600;font-size:14.5px;line-height:1.25}
+.region span{font:500 12px var(--mono);color:var(--muted)}
+
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:36px 40px}
+.feature{display:flex;flex-direction:column;gap:8px}
+.feature p{color:var(--muted)}
+.feature .k{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+
+.next{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px}
+@media (max-width:760px){.next{grid-template-columns:minmax(0,1fr)}}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.list li{display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.list .tag{font:500 11px/1.9 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.list .tag.now{color:var(--accent)}
+
+footer{background:var(--cover);color:var(--on-cover);padding-block:36px;font-size:14px}
+footer .in{display:flex;flex-direction:column;gap:10px}
+footer p{max-width:70ch;opacity:.85}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <path id="arcT" d="M 13 50 A 37 37 0 0 1 87 50"/>
+  <path id="arcB" d="M 6.5 50 A 43.5 43.5 0 0 0 93.5 50"/>
+</defs></svg>
+
+<header class="hero">
+  <div class="in nav">
+    <span class="brand">QLD Parks Passport</span>
+    <nav aria-label="Sections">
+      <a href="#how">How it works</a><a href="#regions">Regions</a><a href="#features">Features</a><a href="#next">What is next</a>
+    </nav>
+  </div>
+  <div class="in hero-grid">
+    <div>
+      <span class="eyebrow">Queensland, Australia · Prototype</span>
+      <h1>Stamp every national park you walk into</h1>
+      <p class="lede">A digital passport for Queensland national parks. Check in with a date and a photo, and the park stamp is inked into your booklet next to who you went with and what you want to remember.</p>
+      <div class="cta">
+        <a class="btn" href="app/">Open the prototype</a>
+        <a class="btn line" href="#how">See how it works</a>
+      </div>
+      <p class="note">50 parks across 8 regions in the starter set. Queensland has more than 300.</p>
+    </div>
+    <div class="spread" aria-label="An open passport showing the pages for Lamington National Park">
+      <div class="leaf l">
+        <svg class="art" viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustration of a mountain range">
+          <rect width="120" height="90" fill="#1f4e8c" opacity=".12"/><circle cx="84" cy="22" r="8" fill="#1f4e8c" opacity=".35"/>
+          <path d="M0 90 L0 52 L18 40 L34 50 L52 30 L70 46 L88 36 L104 48 L120 38 L120 90 Z" fill="#1f4e8c" opacity=".25"/>
+          <path d="M0 90 L0 66 L20 54 L40 64 L62 50 L82 62 L100 56 L120 64 L120 90 Z" fill="#1f4e8c" opacity=".45"/>
+          <path d="M0 90 L0 80 L24 72 L48 78 L70 70 L96 78 L120 72 L120 90 Z" fill="#1f4e8c" opacity=".75"/>
+        </svg>
+        <div><span class="no">No. 01 · South East Queensland</span><div class="pname">Lamington</div><span class="small">National Park, near Canungra</span></div>
+        <ul><li>✓ Walk the Tree Top Walk</li><li>✓ Hike part of the Border Track</li><li>○ Look for Antarctic beech trees</li></ul>
+      </div>
+      <div class="leaf r">
+        <div class="rec">
+          <div id="heroStamp"></div>
+          <div><span class="lab">Date visited</span><span class="hand">14 Mar 2026</span><span class="lab" style="margin-top:6px">Went with</span><span class="hand">@mali, Nan</span></div>
+        </div>
+        <div class="snapbox">Your photo from the park</div>
+        <div><span class="lab">Memories of this place</span><div class="lines">Mist on the Border Track all morning. Whipbirds the whole way.</div></div>
+        <button class="inkbtn" id="ink" type="button">Stamp it again</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="how"><div class="in">
+    <div class="head"><span class="eyebrow">How it works</span><h2>Three steps from the car park to the stamp</h2></div>
+    <ol class="steps">
+      <li><h3>Visit a park</h3><p>Pick a park from the stamp index. Each one has its own two pages with things to do and what is on nearby.</p></li>
+      <li><h3>Check in</h3><p>Add the date and a photo. Tick what you did, tag who came along and write a few lines to remember the day.</p></li>
+      <li><h3>Get the stamp</h3><p>The stamp is inked on the park page and in the index. Some visits also unlock a secret stamp.</p></li>
+    </ol>
+  </div></section>
+
+  <section id="regions" class="band"><div class="in">
+    <div class="head"><span class="eyebrow">The booklet</span><h2>Eight regions, eight inks</h2><p>Every region stamps in its own colour, so a full passport reads like a map of where you have been.</p></div>
+    <div class="regions" id="regionGrid"></div>
+  </div></section>
+
+  <section id="features"><div class="in">
+    <div class="head"><span class="eyebrow">Features</span><h2>A keepsake first, an app second</h2></div>
+    <div class="features">
+      <div class="feature"><span class="k">Park pages</span><h3>One spread for every park</h3><p>The left page shows the place. The right page is yours: stamp, date, your photo, who you went with and your memories in handwriting.</p></div>
+      <div class="feature"><span class="k">Secret stamps</span><h3>Hidden stamps for the curious</h3><p>See glow-worms after dark at Springbrook, arrive in whale season at K'gari, or finish a whole region page. Each one unlocks a stamp you cannot see in advance.</p></div>
+      <div class="feature"><span class="k">Friends</span><h3>Tag who came along</h3><p>Type @username in the "went with" line. Your friend gets the same park stamp in their own passport.</p></div>
+      <div class="feature"><span class="k">Privacy</span><h3>Public only when you say so</h3><p>Every visit is private by default. Tick one box to share it on the community feed, and untick it any time.</p></div>
+      <div class="feature"><span class="k">Community</span><h3>See where others have been</h3><p>The feed shows shared visits with the stamp, photo and note. Tap a name to see that traveller's posts.</p></div>
+      <div class="feature"><span class="k">Milestones</span><h3>Explorer, Trailblazer, Grand Traveller</h3><p>Special stamps at 10 parks, 25 parks and a finished passport.</p></div>
+    </div>
+  </div></section>
+
+  <section id="next" class="band"><div class="in next">
+    <div class="head" style="margin-bottom:0"><span class="eyebrow">What is next</span><h2>Honest about where it is</h2><p>This is a working prototype and a student project. It runs in one browser with demo accounts. The list shows what exists today and what a real release still needs.</p></div>
+    <ul class="list">
+      <li><span class="tag now">Works now</span><span>Stamp booklet, check-in with photo, secret stamps, milestones</span></li>
+      <li><span class="tag now">Demo</span><span>Accounts, friend tagging and the public feed, stored in the browser only</span></li>
+      <li><span class="tag">Next</span><span>Real accounts with email verification and a server</span></li>
+      <li><span class="tag">Next</span><span>GPS check at the park so a stamp means you were there</span></li>
+      <li><span class="tag">Next</span><span>Offline check-in that syncs when the signal comes back</span></li>
+      <li><span class="tag">Later</span><span>Real event listings near each park, then the other states</span></li>
+    </ul>
+  </div></section>
+</main>
+
+<footer><div class="in">
+  <span class="brand">QLD Parks Passport</span>
+  <p>An independent student prototype. It is not affiliated with or endorsed by the Queensland Parks and Wildlife Service. The idea is inspired by the national park passport stamp booklet used in Thailand.</p>
+</div></footer>
+
+<script>
+const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function stampSVG(label, day, mon, year, ink, rot, cls){
+  return '<svg viewBox="0 0 100 100" role="img" aria-label="Stamp: ' + esc(label) + '">' +
+    '<g class="stamp ' + (cls || '') + '"><g transform="rotate(' + rot + ' 50 50)" fill="none" stroke="' + ink + '">' +
+    '<circle cx="50" cy="50" r="47.5" stroke-width="2.2"/><circle cx="50" cy="50" r="30" stroke-width="1"/>' +
+    '<circle cx="9.5" cy="52" r="1.4" fill="' + ink + '" stroke="none"/><circle cx="90.5" cy="52" r="1.4" fill="' + ink + '" stroke="none"/>' +
+    '<text fill="' + ink + '" stroke="none" font-size="' + (label.length > 17 ? 7 : 8.4) + '" text-anchor="middle"><textPath href="#arcT" startOffset="50%">' + esc(label) + '</textPath></text>' +
+    '<text fill="' + ink + '" stroke="none" font-size="6.2" text-anchor="middle"><textPath href="#arcB" startOffset="50%">QUEENSLAND NATIONAL PARK</textPath></text>' +
+    '<text class="date" x="50" y="48" fill="' + ink + '" stroke="none" font-size="11" text-anchor="middle">' + day + ' ' + mon + '</text>' +
+    '<text class="date" x="50" y="60" fill="' + ink + '" stroke="none" font-size="9" text-anchor="middle">' + year + '</text>' +
+    '</g></g></svg>';
+}
+const REGIONS = [
+  ['South East Queensland', 12, 'LAMINGTON', '14', 'MAR'],
+  ['Southern Queensland Country', 4, 'GIRRAWEEN', '06', 'SEP'],
+  ['Fraser Coast and Bundaberg', 5, "K'GARI", '09', 'AUG'],
+  ['Central Queensland', 6, 'CARNARVON', '21', 'JUN'],
+  ['Mackay and Whitsundays', 4, 'EUNGELLA', '03', 'OCT'],
+  ['Townsville and North', 5, 'GIRRINGUN', '11', 'FEB'],
+  ['Tropical North and Cape York', 7, 'DAINTREE', '18', 'JUL'],
+  ['Outback Queensland', 7, 'BOODJAMULLA', '27', 'MAY']
+];
+document.getElementById('regionGrid').innerHTML = REGIONS.map((r, i) =>
+  '<div class="region">' + stampSVG(r[2], r[3], r[4], '2026', 'var(--ink-' + (i + 1) + ')', (i * 7) % 15 - 7) +
+  '<b>' + esc(r[0]) + '</b><span>' + r[1] + ' parks</span></div>').join('');
+const hero = document.getElementById('heroStamp');
+function inkHero(animate){ hero.innerHTML = stampSVG('LAMINGTON', '14', 'MAR', '2026', '#1f4e8c', -6, animate ? 'thump' : ''); }
+inkHero(false);
+document.getElementById('ink').addEventListener('click', () => inkHero(true));
+</script>
+</body>
+</html>
