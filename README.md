@@ -5,6 +5,12 @@ A digital passport for Queensland national parks. Check in with a date and a pho
 - `index.html` is the showcase website.
 - `app/` is the working prototype. See `app/README.md` for how it is built.
 
+## Links
+
+- Website: https://preeyaries.github.io/national-park-passport-QLD/
+- App prototype: https://preeyaries.github.io/national-park-passport-QLD/app/
+- Figma design: https://www.figma.com/design/vDgz9XXeqx9uj3zb79TLy3 (8 mobile screens and all 116 booklet pages)
+
 ## Run locally
 
 Open `index.html` in a browser, or run `python -m http.server 8000` in this folder and open http://localhost:8000
